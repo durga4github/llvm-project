@@ -7172,6 +7172,17 @@ defm INT_SET_MAXNREG_DEC : SET_MAXNREG<"dec", int_nvvm_setmaxnreg_dec_sync_align
 
 } // isConvergent
 
+let hasSideEffects = 1 in {
+// Performance Monitor events
+def INT_PM_EVENT_IDX :  NVPTXInst<(outs), (ins i32imm:$idx),
+                        "pmevent $idx;",
+                        [(int_nvvm_pm_event_idx timm:$idx)]>;
+def INT_PM_EVENT_MASK : NVPTXInst<(outs), (ins i16imm:$mask),
+                        "pmevent.mask $mask;",
+                        [(int_nvvm_pm_event_mask timm:$mask)]>,
+                        Requires<[hasSM<20>, hasPTX<30>]>;
+} // hasSideEffects
+
 //
 // WGMMA fence instructions
 //
